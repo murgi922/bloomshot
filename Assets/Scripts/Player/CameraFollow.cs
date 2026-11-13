@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    private void Update()
+    private void LateUpdate()
     {
         transform.position = player.position;
     }

@@ -33,9 +33,11 @@ public class characterMovement : MonoBehaviour
     }
     private void Update()
     {
-        LimitSpeed();
         Movement();
-        Debug.Log(rb.linearVelocity.magnitude);
+    }
+    private void FixedUpdate()
+    {
+        LimitSpeed();
     }
     #endregion
 }
