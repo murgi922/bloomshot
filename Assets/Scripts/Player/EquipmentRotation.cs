@@ -4,7 +4,7 @@ using UnityEngine.UIElements.Experimental;
 
 public class EquipmentRotation : MonoBehaviour
 {
-    [SerializeField] private float zRot;
+    [SerializeField] private float deadzoneAmount;
     Camera mainCamera;
     InputAction pointAction;
     private Vector2 pointVector;
@@ -15,7 +15,7 @@ public class EquipmentRotation : MonoBehaviour
         else Debug.LogError("Point action could not be found");
         mainCamera = Camera.main;
     }
-    private void Update()
+    private void LateUpdate()
     {
         pointVector = pointAction.ReadValue<Vector2>();
         pointVector = mainCamera.ScreenToWorldPoint(pointVector);
@@ -24,11 +24,17 @@ public class EquipmentRotation : MonoBehaviour
         if (pointVector.x <= 0)
         {
             angle = Vector2.Angle(Vector2.up, pointVector);
-            transform.localScale = new Vector3(1f, 1f, 1f);
         }
         else
         {
             angle = -Vector2.Angle(Vector2.up, pointVector);
+        }
+        if (pointVector.x < (0f - deadzoneAmount))
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else if (pointVector.x > (0f + deadzoneAmount))
+        {
             transform.localScale = new Vector3(-1f, 1f, 1f);
         }
         Debug.Log(angle);

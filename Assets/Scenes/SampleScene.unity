@@ -7420,7 +7420,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -7521,7 +7521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5249eeee371934593f6f2b7d103b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  zRot: 0
+  deadzoneAmount: 0.1
 --- !u!1 &1370450662
 GameObject:
   m_ObjectHideFlags: 0
