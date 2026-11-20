@@ -70,7 +70,27 @@ public class ChangeGround : MonoBehaviour
             tileInfo.TryGetValue(gridPos, out tile);
             groundTilemap.SetTile(gridPos, tile.tileBase);
         }
-        
+        foreach(KeyValuePair<Vector3Int, TileData> dictinfo in tileInfo)
+        {
+            Vector3Int coord = dictinfo.Key;
+            TileData data = dictinfo.Value;
+            data.tileTimer -= Time.deltaTime;
+            if (data.tileTimer <= 0f)
+            {
+                data.tileTimer = fadeTime;
+                if (data.soilState == SoilState.TilledSoil)
+                {
+                    data.tileBase = waterSoil;
+                    data.soilState = SoilState.WaterSoil;
+                    groundTilemap.SetTile(coord, waterSoil);
+                }
+                else if (data.soilState == SoilState.WaterSoil)
+                {
+                    groundTilemap.SetTile(coord, null);
+                    tileInfo.Remove(coord);
+                }
+            }
+        }
     }
     private void AddToDict(Vector3Int coord, TileData data)
     {
