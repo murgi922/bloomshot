@@ -34,12 +34,22 @@ public class ChangeGround : MonoBehaviour
         if (interactAction != null) interactAction.Enable();
         else Debug.LogError("Could not find interact action!");
     }
+    
+    private void Update()
+    {
+        TileSet();
+        TileFade();
+    }
     public void UpdateTilePos(Vector3Int gridPosIn)
     {
         gridPos = gridPosIn;
-        Debug.Log("new Pos = " +  gridPos);
     }
-    private void Update()
+    private void AddToDict(Vector3Int coord, TileData data)
+    {
+        tileInfo[coord] = data;
+    }
+
+    private void TileSet()
     {
         if (interactAction != null && interactAction.WasPressedThisFrame() && willMow && baseTilemap.GetTile(gridPos) == grassTile)
         {
@@ -70,7 +80,10 @@ public class ChangeGround : MonoBehaviour
             tileInfo.TryGetValue(gridPos, out tile);
             groundTilemap.SetTile(gridPos, tile.tileBase);
         }
-        foreach(KeyValuePair<Vector3Int, TileData> dictinfo in tileInfo)
+    }
+    private void TileFade()
+    {
+        foreach (KeyValuePair<Vector3Int, TileData> dictinfo in tileInfo)
         {
             Vector3Int coord = dictinfo.Key;
             TileData data = dictinfo.Value;
@@ -91,9 +104,5 @@ public class ChangeGround : MonoBehaviour
                 }
             }
         }
-    }
-    private void AddToDict(Vector3Int coord, TileData data)
-    {
-        tileInfo[coord] = data;
     }
 }
