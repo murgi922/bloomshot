@@ -8,6 +8,7 @@ public class EquipmentRotation : MonoBehaviour
     Camera mainCamera;
     InputAction pointAction;
     private Vector2 pointVector;
+
     private void Start()
     {
         pointAction = InputSystem.actions.FindAction("Point");
@@ -15,11 +16,13 @@ public class EquipmentRotation : MonoBehaviour
         else Debug.LogError("Point action could not be found");
         mainCamera = Camera.main;
     }
-    private void LateUpdate()
+    public void Rotate()
     {
         pointVector = pointAction.ReadValue<Vector2>();
-        pointVector = mainCamera.ScreenToWorldPoint(pointVector);
+        pointVector = ScreenToWorld(pointVector, mainCamera);
         pointVector = pointVector - new Vector2(transform.position.x, transform.position.y);
+        Debug.Log(pointVector);
+
         float angle;
         if (pointVector.x <= 0)
         {
@@ -37,11 +40,31 @@ public class EquipmentRotation : MonoBehaviour
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
         }
-        Debug.Log(angle);
         Vector3 rotation;
         rotation = new Vector3(0f, 0f, angle);
         Quaternion rot;
         rot = Quaternion.Euler(rotation);
         transform.rotation = rot;
+    }
+    private Vector3 ScreenToWorld(Vector2 screenCoordinates, Camera cam)
+    {
+        Vector2 normVect;
+        Vector2 minValue;
+        Vector2 screenRect;
+        Vector2 world2;
+        Vector3 world3;
+        minValue.x = cam.rect.x * Screen.width;
+        minValue.y = cam.rect.y * Screen.height;
+        screenRect.x = cam.rect.width;
+        screenRect.y = cam.rect.height;
+        normVect.x = (screenCoordinates.x - minValue.x) / (screenRect.x * Screen.width);
+        normVect.y = (screenCoordinates.y - minValue.y) / (screenRect.y * Screen.height);
+        normVect.x -= 0.5f;
+        normVect.y -= 0.5f;
+        world2.y = (normVect.y * 2f * cam.orthographicSize) + cam.transform.position.y;
+        world2.x = (normVect.x * cam.orthographicSize * 2f * ((float)Screen.width / (float)Screen.height)) + cam.transform.position.x;
+        world3 = world2;
+        world3.z = 0f;
+        return world3;
     }
 } 
