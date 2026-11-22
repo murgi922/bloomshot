@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private Rigidbody2D rb;
     private string currentAnimation = "";
     private void Update()
     {
@@ -10,7 +11,11 @@ public class PlayerAnimation : MonoBehaviour
     }
     private void CheckAnimation()
     {
-        ChangeAnimation("Idle", 0f);
+        if (rb.linearVelocity.magnitude > 0.1f)
+        {
+            ChangeAnimation("Walk", 0f);
+        }
+        else ChangeAnimation("Idle", 0f);
     }
     private void ChangeAnimation(string animation, float crossFade = 0.2f)
     {
