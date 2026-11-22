@@ -21,7 +21,6 @@ public class EquipmentRotation : MonoBehaviour
         pointVector = pointAction.ReadValue<Vector2>();
         pointVector = ScreenToWorld(pointVector, mainCamera);
         pointVector = pointVector - new Vector2(transform.position.x, transform.position.y);
-        Debug.Log(pointVector);
 
         float angle;
         if (pointVector.x <= 0)
