@@ -101,7 +101,7 @@ ScriptedImporter:
     addShadowCasters: 0
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
-  platformSettingsDirtyTick: 639303878008415574
+  platformSettingsDirtyTick: 639311590947112175
   singleSpriteImportData:
   - name: 
     originalName: 
@@ -191,8 +191,8 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: 9mmPistolMag_6
     originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 7
+    pivot: {x: 0.5, y: -0.25}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
@@ -212,8 +212,8 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: 9mmPistolMag_7
     originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 7
+    pivot: {x: 0.5, y: -0.25}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
@@ -233,8 +233,8 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: 9mmPistolMag_8
     originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 7
+    pivot: {x: 0.5, y: -0.25}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
@@ -254,8 +254,8 @@ ScriptedImporter:
     uvTransform: {x: 0, y: 0}
   - name: 9mmPistolMag_9
     originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 7
+    pivot: {x: 0.5, y: -0.25}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
