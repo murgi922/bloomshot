@@ -44,7 +44,6 @@ public class HighlightTile : MonoBehaviour
             }
         }
     }
-    private ChangeGround changeGround;
     [Header("Base Tile")]
     [SerializeField] private Tilemap baseTilemap;
     private void Start()
@@ -57,16 +56,14 @@ public class HighlightTile : MonoBehaviour
         tileManager = GetComponentInParent<TileManager>();
         if (tileManager == null) Debug.LogError("TileManager component could not be found by HighlightTile!");
 
-        tilemapHighlight = this.GetComponent<Tilemap>();
-
         MainColor = tileManager.HighlightColor;
         frameTile = tileManager.BorderHighlight;
 
-        changeGround = baseTilemap.GetComponent<ChangeGround>();
     }
     private void Awake()
     {
         Instance = this;
+        tilemapHighlight = GetComponent<Tilemap>();
     }
     private void OnEnable()
     {
@@ -78,8 +75,6 @@ public class HighlightTile : MonoBehaviour
     }
     private void Update()
     {
-        MainColor = tileManager.HighlightColor;
-
         pointVector = pointAction.ReadValue<Vector2>();
         worldPos = mainCamera.ScreenToWorldPoint(new Vector3(pointVector.x, pointVector.y, -mainCamera.transform.position.z));
         Vector2 cameraPos = new Vector2(mainCamera.transform.position.x, mainCamera.transform.position.y);
@@ -104,5 +99,13 @@ public class HighlightTile : MonoBehaviour
     public void EnableHighlight()
     {
         willHighlight = true;
+    }
+    public void SetErrorColor()
+    {
+        MainColor = TileManager.Instance.RedColor;
+    }
+    public void ResetColor()
+    {
+        MainColor = TileManager.Instance.HighlightColor;
     }
 }

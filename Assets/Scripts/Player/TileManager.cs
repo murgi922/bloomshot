@@ -13,6 +13,8 @@ public class TileManager : MonoBehaviour
     [SerializeField] private float maxDistance;
     [SerializeField] private TileBase borderHighlight;
     [SerializeField] private Color highlightColor;
+    [SerializeField] private Color redColor;
+    public Color RedColor => redColor;
     public float MaxDistance => maxDistance;
     public TileBase BorderHighlight => borderHighlight;
     public Color HighlightColor => highlightColor;

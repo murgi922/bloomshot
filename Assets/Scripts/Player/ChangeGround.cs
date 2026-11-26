@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class ChangeGround : MonoBehaviour
@@ -17,11 +16,10 @@ public class ChangeGround : MonoBehaviour
         public float tileTimer;
         public SoilState soilState;
         public TileBase tileBase;
+        public bool hasPlant;
     }
     Dictionary<Vector3Int, TileData> tileInfo = new Dictionary<Vector3Int, TileData>();
     List<Vector3Int> toRemove = new List<Vector3Int>(); 
-    [SerializeField] private bool willMow;
-    [SerializeField] private bool willTill;
     [SerializeField] private Tilemap groundTilemap;
     [SerializeField] private TileBase tilledSoil;
     [SerializeField] private TileBase waterSoil;
@@ -43,6 +41,18 @@ public class ChangeGround : MonoBehaviour
     {
         fadeTime = GetRandomValue(minFadeTime, maxFadeTime);
         TileFade();
+        if (baseTilemap.GetTile(HighlightTile.Instance.PrevGridPos) == grassTile)
+        {
+            HighlightTile.Instance.ResetColor();
+        }
+        else
+        {
+            HighlightTile.Instance.SetErrorColor();
+        }
+    }
+    private void OnDisable()
+    {
+        HighlightTile.Instance.ResetColor();
     }
     private void AddToDict(Vector3Int coord, TileData data)
     {
@@ -51,7 +61,7 @@ public class ChangeGround : MonoBehaviour
 
     private void TileSet(bool willWaternotTill)
     {
-        if (willMow && baseTilemap.GetTile(HighlightTile.Instance.PrevGridPos) == grassTile)
+        if (baseTilemap.GetTile(HighlightTile.Instance.PrevGridPos) == grassTile)
         {
             TileData tile = new TileData();
             tile.tileTimer = fadeTime;
@@ -63,12 +73,14 @@ public class ChangeGround : MonoBehaviour
                     {
                         tile.soilState = SoilState.TilledSoil;
                         tile.tileBase = tilledSoil;
+                        tile.hasPlant = false;
                         SpawnTillSoilFX();
                     }
                     else if (willWaternotTill)
                     {
                         tile.soilState = SoilState.WaterSoil;
                         tile.tileBase = waterSoil;
+                        tile.hasPlant = false;
                         SpawnWaterSoilFX();
                     }
                 }
@@ -81,6 +93,7 @@ public class ChangeGround : MonoBehaviour
             {
                 tile.soilState = SoilState.WaterSoil;
                 tile.tileBase = waterSoil;
+                tile.hasPlant = false;
                 SpawnWaterSoilFX();
             }
             else return;
@@ -95,7 +108,7 @@ public class ChangeGround : MonoBehaviour
             Vector3Int coord = dictinfo.Key;
             TileData data = dictinfo.Value;
             data.tileTimer -= Time.deltaTime;
-            if (data.tileTimer <= 0f)
+            if (data.tileTimer <= 0f && !data.hasPlant)
             {
                 data.tileTimer = fadeTime;
                 if (data.soilState == SoilState.TilledSoil)
@@ -121,10 +134,6 @@ public class ChangeGround : MonoBehaviour
     {
         return Random.Range(min, max);
     }
-    public void InteractActionPressed(bool willWater)
-    {
-        TileSet(willWater);
-    }
     private void SpawnWaterSoilFX()
     {
 
@@ -133,6 +142,53 @@ public class ChangeGround : MonoBehaviour
     {
 
     }
+    #region Public func
+    public void InteractActionPressed(bool willWater)
+    {
+        if (tileInfo.ContainsKey(HighlightTile.Instance.PrevGridPos))
+        {
+            if (tileInfo[HighlightTile.Instance.PrevGridPos].hasPlant)
+            {
+                return;
+            }
+        }
+        TileSet(willWater);
+    }
+    public TileData GetTileData(Vector3Int gridPos)
+    {
+        if (tileInfo.ContainsKey(gridPos))
+        {
+            return(tileInfo[gridPos]);
+        }
+        return null;
+    }
+    public void AddPlantToTile(Vector3Int pos)
+    {
+        if (toRemove.Contains(pos)) toRemove.Remove(pos);
+        tileInfo[pos].hasPlant = true;
+        tileInfo[pos].soilState = SoilState.WaterSoil;
+        tileInfo[pos].tileBase = waterSoil;
+        tileInfo[pos].tileTimer = fadeTime;
+        groundTilemap.SetTile(pos, waterSoil);
+    }
+    public void RemovePlant(Vector3Int pos)
+    {
+        tileInfo.Remove(pos);
+        groundTilemap.SetTile(pos, null);
+    }
+    /*public bool IsContainTile(Vector3Int pos, SoilState soilState)
+    {
+        if (tileInfo.ContainsKey(pos))
+        {
+            if (tileInfo[pos].soilState == soilState)
+            {
+                return true;
+            }
+            else return false;
+        }
+        else return false;
+    }*/
+    #endregion
     private void OnValidate()
     {
         if (minFadeTime > maxFadeTime)
