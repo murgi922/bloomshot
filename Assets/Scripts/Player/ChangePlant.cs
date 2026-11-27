@@ -68,13 +68,9 @@ public class ChangePlant : MonoBehaviour
                 data.tileTimer = fadeTime;
                 if (data.plantIndex >= 0 && data.plantIndex < plants.Length - 1)
                 {
-                    data.tileBase = plants[data.plantIndex++];
+                    data.tileBase = plants[++data.plantIndex];
                     plantTileMap.SetTile(coord, plants[data.plantIndex]);
                     AddGrowthFX(coord);
-                }
-                else
-                {
-                    return;
                 }
             }
         }

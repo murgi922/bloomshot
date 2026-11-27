@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,8 @@ public class characterMovement : MonoBehaviour
     [SerializeField] private float maxSpeed;
     private InputAction moveAction;
     private Vector2 moveValue;
+    [Header("Animation")]
+    [SerializeField] private PlayerAnimation playerAnimation;
 
     private void Movement()
     {
@@ -34,6 +37,7 @@ public class characterMovement : MonoBehaviour
     private void Update()
     {
         Movement();
+        playerAnimation.SendMoveValue(moveValue);
     }
     private void FixedUpdate()
     {
