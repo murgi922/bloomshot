@@ -20,31 +20,41 @@ public class PlayerAnimation : MonoBehaviour
             }
         }
     }
+    private EquipmentRotation equipRot;
     private void Start()
     {
         playerSpriteRend = GetComponent<SpriteRenderer>();
     }
+    private void Awake()
+    {
+        equipRot = GetComponentInChildren<EquipmentRotation>();
+    }
     private void Update()
     {
         CheckAnimation();
+        Debug.Log(equipRot.Angle);
     }
     private void CheckAnimation()
     {
-        if (moveValue.y < -0.2f)
+        if (moveValue.y < -0.2f || moveValue.y > 0.2f && Mathf.Abs(equipRot.Angle) >= 120f)
         {
             IsBack = false;
             ChangeAnimation("Walk", 0f);
         }
-        else if (moveValue.y > 0.2f)
+        else if (moveValue.y > 0.2f && Mathf.Abs(equipRot.Angle) < 120f)
         {
             IsBack = true;
             ChangeAnimation("BackWalk", 0f);
         }
-        else if(IsBack)
+        else if (IsBack && Mathf.Abs(equipRot.Angle) < 120f)
         {
             ChangeAnimation("BackIdle", 0f);
         }
-        else ChangeAnimation("Idle", 0f);
+        else
+        {
+            IsBack = false;
+            ChangeAnimation("Idle", 0f);
+        }
     }
     private void ChangeAnimation(string animation, float crossFade = 0.2f)
     {

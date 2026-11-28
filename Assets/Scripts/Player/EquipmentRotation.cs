@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 public class EquipmentRotation : MonoBehaviour
 {
     [SerializeField] private float deadzoneAmount;
+    private float tempAngle;
+    public float Angle => tempAngle;
     Camera mainCamera;
     InputAction pointAction;
     private Vector2 pointVector;
@@ -44,6 +47,7 @@ public class EquipmentRotation : MonoBehaviour
         Quaternion rot;
         rot = Quaternion.Euler(rotation);
         transform.rotation = rot;
+        tempAngle = angle;
     }
     private Vector3 ScreenToWorld(Vector2 screenCoordinates, Camera cam)
     {
