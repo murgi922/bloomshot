@@ -25,6 +25,7 @@ public class EquipmentManager : MonoBehaviour
             if (data.gameObject.activeSelf)
             {
                 currentEquipment = data;
+                Equip(currentEquipment.Data);
             }
         }
     }
