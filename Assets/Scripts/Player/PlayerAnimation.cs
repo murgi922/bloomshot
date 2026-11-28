@@ -32,7 +32,6 @@ public class PlayerAnimation : MonoBehaviour
     private void Update()
     {
         CheckAnimation();
-        Debug.Log(equipRot.Angle);
     }
     private void CheckAnimation()
     {

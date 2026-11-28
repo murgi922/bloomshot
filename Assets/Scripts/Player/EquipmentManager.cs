@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
+    public static EquipmentManager Instance;
     #region Variables
     [SerializeField] private Transform weaponsParent;
     [SerializeField] private Transform harvestToolsParent;
     private List<EquipmentData> equipments = new List<EquipmentData>();
-    private Equipment currentEquipment;
+    private EquipmentData currentEquipment;
     private void Awake()
     {
+        Instance = this;
         foreach(EquipmentData data in weaponsParent.GetComponentsInChildren<EquipmentData>(true))
         {
             equipments.Add(data);
@@ -18,12 +20,36 @@ public class EquipmentManager : MonoBehaviour
         {
             equipments.Add(data);
         }
+        foreach(EquipmentData data in equipments)
+        {
+            if (data.gameObject.activeSelf)
+            {
+                currentEquipment = data;
+            }
+        }
     }
     public void CycleEquipment()
     {
-        foreach(EquipmentData data in equipments)
+        for(int i = 0; i < equipments.Count; i++)
         {
-
+            int ind;
+            if (currentEquipment != equipments[i])
+            {
+                continue;
+            }
+            else
+            {
+                ind = i;
+            }
+            if (ind == equipments.Count - 1)
+            {
+                Equip(equipments[0].Data);
+            }
+            else
+            {
+                Equip(equipments[ind + 1].Data);
+            }
+            break;
         }
     }
     public void Equip(Equipment toEquip)
@@ -32,6 +58,7 @@ public class EquipmentManager : MonoBehaviour
         {
             if (toEquip == data.Data)
             {
+                currentEquipment = data;
                 data.gameObject.SetActive(true);
             }
             else data.gameObject.SetActive(false);
